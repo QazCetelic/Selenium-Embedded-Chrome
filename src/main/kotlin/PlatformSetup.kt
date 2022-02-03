@@ -18,7 +18,14 @@ sealed class PlatformSetup {
     fun setup(installDirectory: File?, configureOptions: ChromeOptions.() -> Unit): ChromeDriver {
         val installFolder = extractResourcesAt(installDirectory)
         val (browserExe, driver) = getBrowserExeAndDriver(installFolder)
+
+        // Sets the system property for the WebDriver and sets it back to what it was before after the JVM exits.
+        val previousWebDriverValue: String? = runCatching { System.getProperty("webdriver.chrome.driver") }.getOrNull()
         System.setProperty("webdriver.chrome.driver", driver.path)
+        if (previousWebDriverValue != null) {
+            val thread = Thread { System.setProperty("webdriver.chrome.driver", previousWebDriverValue) }
+            Runtime.getRuntime().addShutdownHook(thread)
+        }
 
         // Configure the browser options
         val options = ChromeOptions()
