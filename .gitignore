@@ -1,3 +1,10 @@
 # Project exclude paths
 /.gradle/
 /build/
+
+# Exclude created zips for setup
+src/main/resources/*_setup_resources.zip
+
+# Exclude files used to create setup zips
+src/test/resources/*/chromium-browser/
+src/test/resources/*/chromiumdriver
