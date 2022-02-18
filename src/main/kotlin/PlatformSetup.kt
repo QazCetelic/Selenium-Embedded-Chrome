@@ -27,7 +27,7 @@ sealed class PlatformSetup {
             Runtime.getRuntime().addShutdownHook(thread)
         }
 
-        // Configure the browser options
+        // Configure the browser options using the provided lambda.
         val options = ChromeOptions()
         configureOptions(options)
         options.setBinary(browserExe)
@@ -35,14 +35,11 @@ sealed class PlatformSetup {
     }
 
     private fun extractResourcesAt(installDirectory: File? = null): File {
-        if (installDirectory != null) {
+        when {
+            installDirectory == null -> {}
             // Current state: Specified installDirectory might not exist or be a file
-            if (!installDirectory.exists()) {
-                installDirectory.mkdirs()
-            }
-            else {
-                if (installDirectory.isFile) throw IllegalArgumentException("$installDirectory is a file, not a folder")
-            }
+            installDirectory.exists() -> installDirectory.mkdirs()
+            installDirectory.isFile -> throw IllegalArgumentException("$installDirectory is a file, not a folder")
             // Current state: installDirectory is an existing directory
         }
 
@@ -100,28 +97,29 @@ sealed class PlatformSetup {
     private fun verifyInstall(installDirectory: File): Boolean {
         val browser = installDirectory.resolve(browserFile)
         if (!browser.exists()) {
-            System.err.println("$browserFile not found in $installDirectory")
+            System.err.println("browser ($browser) not found in $installDirectory")
             return false
         }
         if (!browser.isDirectory) {
-            System.err.println("Expected $browserFile to be a directory")
+            System.err.println("Expected $browser to be a directory")
             return false
         }
         if ((browser.listFiles() ?: arrayOf()).isEmpty()) {
-            System.err.println("$browserFile should contain files")
+            System.err.println("$browser should contain files")
             return false
         }
 
         val driver = installDirectory.resolve(driverFile)
         if (!driver.exists()) {
-            System.err.println("$driverFile not found in $installDirectory")
+            System.err.println("driver ($driver) not found in $installDirectory")
             return false
         }
         if (!driver.isFile) {
-            System.err.println("Expected $driverFile to be a file")
+            System.err.println("Expected $driver to be a file")
             return false
         }
 
+        println("Found a valid installation in $installDirectory")
         return true
     }
 }

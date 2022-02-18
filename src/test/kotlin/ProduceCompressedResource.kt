@@ -7,6 +7,7 @@ import java.io.File
 
 /**
  * Not a test but script to generate the compressed resources.
+ * It's located here to prevent it from being included in the build.
  */
 fun main() {
     val src = "${System.getProperty("user.dir")}/src"
@@ -22,7 +23,6 @@ fun main() {
 
         val parameters = ZipParameters().apply {
             compressionMethod   = CompressionMethod.DEFLATE
-            // compressionLevel    = CompressionLevel.HIGHER
             compressionLevel    = CompressionLevel.PRE_ULTRA
         }
         compressed.addFolder(chromiumBrowser, parameters)
@@ -30,4 +30,6 @@ fun main() {
     }
 
     zip("linux")
+    // TODO add windows
+    // TODO add mac
 }
