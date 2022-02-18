@@ -19,6 +19,6 @@ The system property detailing the location of the `WebDriver` is set to the inst
 **It is reverted to the original value when the JVM shuts down**.
 
 ### Disclaimers
-- Currently, **only Linux** is supported.
+- Currently, **only Linux** is supported. Windows support is planned. MacOS isn't because I don't have a Mac to test on.
 - The actual resources containing the browser binary and the WebDriver and the final `.jar` itself **aren't included** in the repository yet.
   Because they exceed the 100MB size limit of the GitHub repository, they will probably be hosted somewhere else.
